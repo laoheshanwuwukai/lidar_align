@@ -1,36 +1,64 @@
 #include "lidar_align/aligner.h"
-
+#include "lidar_align/common.h"
+#include <future>
+#include <ios>
 namespace lidar_align {
 
-Aligner::Aligner(const Config& config) : config_(config){};
+std::ostream &operator<<(std::ostream &os, const Aligner::Config &config) {
+  // clang-format off
+  std::cout << std::boolalpha
+            << "Aligner config:\n"
+            << "  local: "                  << config.local << "\n"
+            << "  max_time_offset: "        << config.max_time_offset << "\n"
+            << "  angular_range: "          << config.angular_range << "\n"
+            << "  translation_range: "      << config.translation_range << "\n"
+            << "  max_evals: "              << config.max_evals << "\n"
+            << "  xtol: "                   << config.xtol << "\n"
+            << "  knn_batch_size: "         << config.knn_batch_size << "\n"
+            << "  knn_k: "                  << config.knn_k << "\n"
+            << "  local_knn_max_dist: "     << config.local_knn_max_dist << "\n"
+            << "  global_knn_max_dist: "    << config.global_knn_max_dist << "\n"
+            << "  time_cal: "               << config.time_cal << "\n"
+            << "  output_pointcloud_path: " << config.output_pointcloud_path << "\n"
+            << "  output_calibration_path: "<< config.output_calibration_path << "\n"
+            << std::noboolalpha << std::endl;
+  // clang-format on
+  return os;
+}
 
-Aligner::Config Aligner::getConfig(ros::NodeHandle* nh) {
+Aligner::Aligner(const Config &config) : config_(config) {};
+
+Aligner::Config getConfig(const YAML::Node &node) {
   Aligner::Config config;
-  nh->param("local", config.local, config.local);
-  nh->param("inital_guess", config.inital_guess, config.inital_guess);
-  nh->param("max_time_offset", config.max_time_offset, config.max_time_offset);
-  nh->param("angular_range", config.angular_range, config.angular_range);
-  nh->param("translation_range", config.translation_range,
-            config.translation_range);
-  nh->param("max_evals", config.max_evals, config.max_evals);
-  nh->param("xtol", config.xtol, config.xtol);
-  nh->param("knn_batch_size", config.knn_batch_size, config.knn_batch_size);
-  nh->param("knn_k", config.knn_k, config.knn_k);
-  nh->param("global_knn_max_dist", config.global_knn_max_dist,
-            config.global_knn_max_dist);
-  nh->param("local_knn_max_dist", config.local_knn_max_dist,
-            config.local_knn_max_dist);
-  nh->param("time_cal", config.time_cal, config.time_cal);
-  nh->param("output_pointcloud_path", config.output_pointcloud_path,
-            config.output_pointcloud_path);
-  nh->param("output_calibration_path", config.output_calibration_path,
-            config.output_calibration_path);
-
+  static const std::string aligner = "aligner";
+  config.local = _ReadYaml<bool>(node, {aligner, "local"});
+  config.inital_guess =
+      _ReadYaml<std::vector<double>>(node, {aligner, "inital_guess"});
+  config.max_time_offset =
+      _ReadYaml<double>(node, {aligner, "max_time_offset"});
+  config.angular_range = _ReadYaml<double>(node, {aligner, "angular_range"});
+  config.translation_range =
+      _ReadYaml<double>(node, {aligner, "translation_range"});
+  config.max_evals = _ReadYaml<double>(node, {aligner, "max_evals"});
+  config.xtol = _ReadYaml<double>(node, {aligner, "xtol"});
+  config.knn_batch_size = _ReadYaml<int>(node, {aligner, "knn_batch_size"});
+  config.knn_k = _ReadYaml<int>(node, {aligner, "knn_k"});
+  config.global_knn_max_dist =
+      _ReadYaml<float>(node, {aligner, "global_knn_max_dist"});
+  config.local_knn_max_dist =
+      _ReadYaml<float>(node, {aligner, "local_knn_max_dist"});
+  config.time_cal = _ReadYaml<bool>(node, {aligner, "time_cal"});
+  config.output_pointcloud_path =
+      _ReadYaml<std::string>(node, {aligner, "output_pointcloud_path"});
+  config.output_calibration_path =
+      _ReadYaml<std::string>(node, {aligner, "output_calibration_path"});
+  /**/
+  std::cout << config;
   return config;
 }
 
-float Aligner::kNNError(const pcl::KdTreeFLANN<Point>& kdtree,
-                        const Pointcloud& pointcloud, const size_t k,
+float Aligner::kNNError(const pcl::KdTreeFLANN<Point> &kdtree,
+                        const Pointcloud &pointcloud, const size_t k,
                         const float max_dist, const size_t start_idx,
                         const size_t end_idx) {
   std::vector<int> kdtree_idx(k);
@@ -40,24 +68,24 @@ float Aligner::kNNError(const pcl::KdTreeFLANN<Point>& kdtree,
   for (size_t idx = start_idx; idx < std::min(pointcloud.size(), end_idx);
        ++idx) {
     kdtree.nearestKSearch(pointcloud[idx], k, kdtree_idx, kdtree_dist);
-    for (const float& x : kdtree_dist) {
+    for (const float &x : kdtree_dist) {
       error += std::min(x, max_dist);
     }
   }
   return error;
 }
 
-float Aligner::lidarOdomKNNError(const Pointcloud& base_pointcloud,
-                                 const Pointcloud& combined_pointcloud) const {
+float Aligner::lidarOdomKNNError(const Pointcloud &base_pointcloud,
+                                 const Pointcloud &combined_pointcloud) const {
   // kill optimization if node stopped
-  if (!ros::ok()) {
-    throw std::runtime_error("ROS node died, exiting");
-  }
+  /*if (!ros::ok()) {*/
+  /*  throw std::runtime_error("ROS node died, exiting");*/
+  /*}*/
 
   // shared_pointer needed by kdtree, no-op destructor to prevent it trying to
   // clean it up after use
   Pointcloud::ConstPtr combined_pointcloud_ptr(&combined_pointcloud,
-                                               [](const Pointcloud*) {});
+                                               [](const Pointcloud *) {});
 
   pcl::KdTreeFLANN<Point> kdtree;
 
@@ -88,22 +116,22 @@ float Aligner::lidarOdomKNNError(const Pointcloud& base_pointcloud,
 
   // wait for threads to finish and grab results
   float total_error = 0.0f;
-  for (std::future<float>& error : errors) {
+  for (std::future<float> &error : errors) {
     total_error += error.get();
   }
 
   return total_error;
 }
 
-float Aligner::lidarOdomKNNError(const Lidar& lidar) const {
+float Aligner::lidarOdomKNNError(const Lidar &lidar) const {
   Pointcloud pointcloud;
   lidar.getCombinedPointcloud(&pointcloud);
   return lidarOdomKNNError(pointcloud, pointcloud);
 }
 
-double Aligner::LidarOdomMinimizer(const std::vector<double>& x,
-                                   std::vector<double>& grad, void* f_data) {
-  OptData* d = static_cast<OptData*>(f_data);
+double Aligner::LidarOdomMinimizer(const std::vector<double> &x,
+                                   std::vector<double> &grad, void *f_data) {
+  OptData *d = static_cast<OptData *>(f_data);
 
   if (x.size() > 6) {
     d->lidar->setOdomOdomTransforms(*(d->odom), x[6]);
@@ -141,9 +169,9 @@ double Aligner::LidarOdomMinimizer(const std::vector<double>& x,
   return error;
 }
 
-void Aligner::optimize(const std::vector<double>& lb,
-                       const std::vector<double>& ub, OptData* opt_data,
-                       std::vector<double>* x) {
+void Aligner::optimize(const std::vector<double> &lb,
+                       const std::vector<double> &ub, OptData *opt_data,
+                       std::vector<double> *x) {
   nlopt::opt opt;
   if (config_.local) {
     opt = nlopt::opt(nlopt::LN_BOBYQA, x->size());
@@ -165,7 +193,7 @@ void Aligner::optimize(const std::vector<double>& lb,
   LidarOdomMinimizer(*x, grad, opt_data);
 }
 
-std::string Aligner::generateCalibrationString(const Transform& T,
+std::string Aligner::generateCalibrationString(const Transform &T,
                                                const double time_offset) {
   Transform::Vector6 T_log = T.log();
   std::stringstream ss;
@@ -224,7 +252,7 @@ std::string Aligner::generateCalibrationString(const Transform& T,
   return ss.str();
 }
 
-void Aligner::lidarOdomTransform(Lidar* lidar, Odom* odom) {
+void Aligner::lidarOdomTransform(Lidar *lidar, Odom *odom) {
   OptData opt_data;
   opt_data.lidar = lidar;
   opt_data.odom = odom;
@@ -239,7 +267,9 @@ void Aligner::lidarOdomTransform(Lidar* lidar, Odom* odom) {
   std::vector<double> x(num_params, 0.0);
 
   if (!config_.local) {
-    ROS_INFO("Performing Global Optimization...                             ");
+    std::cout
+        << ("Performing Global Optimization...                             ")
+        << std::endl;
 
     std::vector<double> lb = {-M_PI, -M_PI, -M_PI};
     std::vector<double> ub = {M_PI, M_PI, M_PI};
@@ -256,7 +286,9 @@ void Aligner::lidarOdomTransform(Lidar* lidar, Odom* odom) {
     x = config_.inital_guess;
   }
 
-  ROS_INFO("Performing Local Optimization...                                ");
+  std::cout
+      << ("Performing Local Optimization...                                ")
+      << std::endl;
 
   std::vector<double> lb = {
       -config_.translation_range, -config_.translation_range,
@@ -278,23 +310,26 @@ void Aligner::lidarOdomTransform(Lidar* lidar, Odom* odom) {
   optimize(lb, ub, &opt_data, &x);
 
   if (!config_.output_pointcloud_path.empty()) {
-    ROS_INFO(
-        "Saving Aligned Pointcloud...                                     ");
+    std::cout
+        << ("Saving Aligned Pointcloud...                                     ")
+        << std::endl;
     lidar->saveCombinedPointcloud(config_.output_pointcloud_path);
   }
 
   const std::string output_calibration =
       generateCalibrationString(lidar->getOdomLidarTransform(), x.back());
   if (!config_.output_calibration_path.empty()) {
-    ROS_INFO("Saving Calibration File...                                ");
+    std::cout << ("Saving Calibration File...                                ")
+              << std::endl;
 
     std::ofstream file;
     file.open(config_.output_calibration_path, std::ofstream::out);
     file << output_calibration;
     file.close();
   }
-  ROS_INFO("\e[1mFinal Calibration:\e[0m                                ");
+  std::cout << ("\e[1mFinal Calibration:\e[0m                                ")
+            << std::endl;
   std::cout << output_calibration;
 }
 
-}  // namespace lidar_align
+} // namespace lidar_align

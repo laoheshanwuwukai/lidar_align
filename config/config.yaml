@@ -1,0 +1,36 @@
+loader:
+    use_n_scans : 1000
+
+sensor:
+    min_point_distance : 0.0
+    max_point_distance : 100.0
+    keep_points_ratio : 0.01
+    min_return_intensity : -1.0
+
+    estimate_point_times : false
+    clockwise_lidar : false
+    motion_compensation : true
+    lidar_rpm : 600.0
+
+aligner:
+    local : false
+    max_time_offset : 0.1
+    angular_range : 0.5
+    translation_range : 1.0
+    max_evals : 200
+    xtol : 0.0001
+    knn_batch_size : 1000
+    knn_k : 1
+    local_knn_max_dist : 0.1
+    global_knn_max_dist : 1.0
+    time_cal : true
+    output_pointcloud_path : ""
+    output_calibration_path : ""
+    inital_guess:
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0

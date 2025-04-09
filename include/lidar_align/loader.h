@@ -1,42 +1,48 @@
 #ifndef LIDAR_ALIGN_LOADER_H_
 #define LIDAR_ALIGN_LOADER_H_
 
+#include <filesystem>
 #include <pcl/point_types.h>
-#include <ros/ros.h>
 
 #include "lidar_align/sensors.h"
 
 #define PCL_NO_PRECOMPILE
 
 namespace lidar_align {
+namespace fs = std::filesystem;
 
 class Loader {
- public:
+public:
   struct Config {
     int use_n_scans = std::numeric_limits<int>::max();
   };
 
-  Loader(const Config& config);
+  Loader(const Config &config);
 
-  void parsePointcloudMsg(const sensor_msgs::PointCloud2 msg,
-                          LoaderPointcloud* pointcloud);
+  /*static Config getConfig(ros::NodeHandle *nh);*/
+  /*void parsePointcloudMsg(const sensor_msgs::PointCloud2 msg,*/
+  /*                        LoaderPointcloud *pointcloud);*/
+  /*bool loadTformFromMaplabCSV(const std::string &csv_path, Odom *odom);*/
 
-  bool loadPointcloudFromROSBag(const std::string& bag_path,
-                                const Scan::Config& scan_config, Lidar* lidar);
+  // TODO origin load pointcloud and odom from rosbag
+  /*bool loadPointcloudFromROSBag(const std::string &bag_path,*/
+  /*                              const Scan::Config &scan_config, Lidar
+   * *lidar);*/
+  /*bool loadTformFromROSBag(const std::string &bag_path, Odom *odom);*/
 
-  bool loadTformFromROSBag(const std::string& bag_path, Odom* odom);
+  bool loadPointCloudFromFolder(const fs::path &folder,
+                                const Scan::Config &scan_config, Lidar *lidar);
+  bool loadTfromFile(const fs::path &file, Odom *odom);
 
-  bool loadTformFromMaplabCSV(const std::string& csv_path, Odom* odom);
+  static Config getConfig(const YAML::Node &node);
 
-  static Config getConfig(ros::NodeHandle* nh);
-
- private:
-  static bool getNextCSVTransform(std::istream& str, Timestamp* stamp,
-                                  Transform* T);
+private:
+  /*static bool getNextCSVTransform(std::istream &str, Timestamp *stamp,*/
+  /*                                Transform *T);*/
 
   Config config_;
 };
-}  // namespace lidar_align
+} // namespace lidar_align
 
 POINT_CLOUD_REGISTER_POINT_STRUCT(
     lidar_align::PointAllFields,
@@ -45,4 +51,4 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(
         uint16_t, reflectivity, reflectivity)(uint16_t, intensity,
                                               intensity)(uint8_t, ring, ring))
 
-#endif  // LIDAR_ALIGN_ALIGNER_H_
+#endif // LIDAR_ALIGN_ALIGNER_H_

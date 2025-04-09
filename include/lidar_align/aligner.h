@@ -1,17 +1,17 @@
 #ifndef LIDAR_ALIGN_ALIGNER_H_
 #define LIDAR_ALIGN_ALIGNER_H_
 
-#include <ros/ros.h>
-#include <future>
+/*#include <ros/ros.h>*/
 #include <limits>
 #include <nlopt.hpp>
+#include <ostream>
 
 #include "lidar_align/sensors.h"
 
 namespace lidar_align {
 
 class Aligner {
- public:
+public:
   struct Config {
     bool local = false;
     std::vector<double> inital_guess{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -30,44 +30,49 @@ class Aligner {
 
     std::string output_pointcloud_path = "";
     std::string output_calibration_path = "";
+
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const Aligner::Config &config);
   };
 
   struct OptData {
-    Lidar* lidar;
-    Odom* odom;
-    Aligner* aligner;
+    Lidar *lidar;
+    Odom *odom;
+    Aligner *aligner;
     bool time_cal;
   };
 
-  Aligner(const Config& config);
+  Aligner(const Config &config);
 
-  static Config getConfig(ros::NodeHandle* nh);
+  /*static Config getConfig(ros::NodeHandle *nh);*/
 
-  void lidarOdomTransform(Lidar* lidar, Odom* odom);
+  void lidarOdomTransform(Lidar *lidar, Odom *odom);
 
- private:
-  void optimize(const std::vector<double>& lb, const std::vector<double>& ub,
-                OptData* opt_data, std::vector<double>* x);
+private:
+  void optimize(const std::vector<double> &lb, const std::vector<double> &ub,
+                OptData *opt_data, std::vector<double> *x);
 
-  std::string generateCalibrationString(const Transform& T,
+  std::string generateCalibrationString(const Transform &T,
                                         const double time_offset);
 
-  static float kNNError(
-      const pcl::KdTreeFLANN<Point>& kdtree, const Pointcloud& pointcloud,
-      const size_t k, const float max_dist, const size_t start_idx = 0,
-      const size_t end_idx = std::numeric_limits<size_t>::max());
+  static float
+  kNNError(const pcl::KdTreeFLANN<Point> &kdtree, const Pointcloud &pointcloud,
+           const size_t k, const float max_dist, const size_t start_idx = 0,
+           const size_t end_idx = std::numeric_limits<size_t>::max());
 
-  float lidarOdomKNNError(const Pointcloud& base_pointcloud,
-                          const Pointcloud& combined_pointcloud) const;
+  float lidarOdomKNNError(const Pointcloud &base_pointcloud,
+                          const Pointcloud &combined_pointcloud) const;
 
-  float lidarOdomKNNError(const Lidar& lidar) const;
+  float lidarOdomKNNError(const Lidar &lidar) const;
 
-  static double LidarOdomMinimizer(const std::vector<double>& x,
-                                   std::vector<double>& grad, void* f_data);
+  static double LidarOdomMinimizer(const std::vector<double> &x,
+                                   std::vector<double> &grad, void *f_data);
 
   Config config_;
 };
 
-}  // namespace lidar_align
+Aligner::Config getConfig(const YAML::Node &node);
 
-#endif  // LIDAR_ALIGN_ALIGNER_H_
+} // namespace lidar_align
+
+#endif // LIDAR_ALIGN_ALIGNER_H_
