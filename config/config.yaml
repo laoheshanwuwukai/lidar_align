@@ -24,8 +24,8 @@ aligner:
     local_knn_max_dist : 0.1
     global_knn_max_dist : 1.0
     time_cal : true
-    output_pointcloud_path : ""
-    output_calibration_path : ""
+    output_pointcloud_path : "/home/udeer/data/InsGj/0408/result/cloud.ply"
+    output_calibration_path : "/home/udeer/data/InsGj/0408/result/calib.txt"
     inital_guess:
       - 0.0
       - 0.0

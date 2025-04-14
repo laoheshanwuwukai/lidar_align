@@ -4,7 +4,7 @@ project(lidar_align)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE debug)
+  set(CMAKE_BUILD_TYPE release)
 endif()
 
 
