@@ -28,8 +28,10 @@ def plot_two_txt_files_nearest_match(file_a, file_b):
     idx_b_matched = np.abs(t_b[:, None] - t_a).argmin(axis=0)
     df_b_aligned = df_b.iloc[idx_b_matched, :].reset_index(drop=True)
 
+    t_a[:] = t_a[:] - t_a[0]
+
     # 画图
-    titles = ["t", "x", "y", "z", "roll", "pitch", "yaw"]
+    titles = ["t_lidar", "x", "y", "z", "roll", "pitch", "yaw"]
 
     for i in range(1, 7):
         name = titles[i]
@@ -39,7 +41,7 @@ def plot_two_txt_files_nearest_match(file_a, file_b):
         plt.plot(t_a, df_b_aligned.iloc[:, i].to_numpy(
         ), label=f'Ins - {name}', linestyle='--')
         plt.xlabel('Timestamp (s)')
-        plt.ylabel(f'{name} {"(°)" if i >= 4 else ""}')
+        plt.ylabel(f'{name} {"(°)" if i >= 4 else "(m)"}')
         plt.title(f'{name} over Time (Aligned by Nearest Timestamp)')
         plt.legend()
         plt.grid(True)
@@ -49,6 +51,6 @@ def plot_two_txt_files_nearest_match(file_a, file_b):
 
 
 if __name__ == "__main__":
-    mapping_result = "/home/udeer/data/InsGj/0408/mapping_result/mapping_result_in_lidar_rpy"
-    gongji_result = "/home/udeer/data/InsGj/0408/_udeer_drivers_gnss_gjins_ins_raw"
+    mapping_result = "/home/udeer/data/InsGj/0408/0414check/lidarpose_EVO_inggongji_txyzrpy"
+    gongji_result = "/home/udeer/data/InsGj/0408/0414check/_udeer_drivers_gnss_gjins_ins_txyzrpy"
     plot_two_txt_files_nearest_match(mapping_result, gongji_result)

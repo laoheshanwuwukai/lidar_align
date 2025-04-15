@@ -37,8 +37,7 @@ target_link_libraries( lidar_align_common
 
 
 add_executable(lidar_align_node
-  # src/lidar_align_node.cpp
-  src/test.cpp
+  src/lidar_align_node.cpp
 )
 target_link_libraries(lidar_align_node
   lidar_align_common
