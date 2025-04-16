@@ -14,3 +14,9 @@ evo_ape tum \
   /home/udeer/data/InsGj/0408/0414check/_udeer_drivers_gnss_gjins_ins_tumformat \
   -r trans_part --plot --plot_mode xy -va \
   --t_end 1744082502.95032
+
+# lidar 定位结果和 建图结果进行evo核对
+evo_ape tum \
+  /home/udeer/data/InsGj/0408/mapping_result/mapping_result_tum_format \
+  /home/udeer/data/InsGj/lidarlocalizer/fusion_tum.txt \
+  -r trans_part --plot --plot_mode xy -va

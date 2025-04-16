@@ -125,5 +125,8 @@ int main(int argc, char *argv[]) {
 
   std::cout << std::setprecision(15) << "f: " << f << "  d:" << d
             << "  lli: " << result << " test: " << test << std::endl;
+
+  f = 99999;
+  std::cout << "float " << f;
   return 0;
 }

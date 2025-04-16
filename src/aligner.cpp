@@ -286,6 +286,14 @@ void Aligner::lidarOdomTransform(Lidar *lidar, Odom *odom) {
     x = config_.inital_guess;
   }
 
+  std::cout << "Debug :---------------------------" << std::endl;
+  std::string debug_msg = "";
+  for (const auto &v : x) {
+    debug_msg += (std::to_string(v) + " ");
+  }
+  std::cout << debug_msg << std::endl;
+  std::cout << "Debug :---------------------------" << std::endl;
+
   std::cout
       << ("Performing Local Optimization...                                ")
       << std::endl;

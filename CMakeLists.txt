@@ -50,6 +50,13 @@ target_link_libraries(fortest
   lidar_align_common
   gflags_shared
 )
+add_executable(combain
+  src/combainclouds.cpp
+)
+target_link_libraries(combain
+  lidar_align_common
+  gflags_shared
+)
 
 
 install(DIRECTORY include/lidar_align

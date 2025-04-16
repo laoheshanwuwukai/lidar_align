@@ -28,16 +28,22 @@ int main(int argc, char *argv[]) {
   lidar_align::Odom odom;
   lidar_align::Loader loader(lidar_align::Loader::getConfig(node));
 
+  if (!loader.loadTfromFile(ins_file, &odom)) {
+    std::cout << "Error: loader load T failed";
+    return -1;
+  }
+
+  /*if (!loader.loadTumTfromFile(ins_file, &odom)) {*/
+  /*  std::cout << "Error: loader load T failed";*/
+  /*  return -1;*/
+  /*}*/
+
   if (!loader.loadPointCloudFromFolder(lidar_folder, scan_config, &lidar)) {
     std::cout << "Error: loader load lidar failed";
     return -1;
   }
   std::cout << "Load lidar finished" << std::endl;
 
-  if (!loader.loadTfromFile(ins_file, &odom)) {
-    std::cout << "Error: loader load T failed";
-    return -1;
-  }
   std::cout << "Load odom finished" << std::endl;
   lidar.setOdomOdomTransforms(odom);
 

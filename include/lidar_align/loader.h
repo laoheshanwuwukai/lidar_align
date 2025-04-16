@@ -32,13 +32,19 @@ public:
 
   bool loadPointCloudFromFolder(const fs::path &folder,
                                 const Scan::Config &scan_config, Lidar *lidar);
+
+  // Load pose from T matrix file
   bool loadTfromFile(const fs::path &file, Odom *odom);
+
+  // Load pose from tum format file
+  bool loadTumTfromFile(const fs::path &file, Odom *odom);
 
   static Config getConfig(const YAML::Node &node);
 
 private:
   /*static bool getNextCSVTransform(std::istream &str, Timestamp *stamp,*/
   /*                                Transform *T);*/
+  Timestamp first_odom_us;
 
   Config config_;
 };

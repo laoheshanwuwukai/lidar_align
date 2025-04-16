@@ -1,7 +1,10 @@
 #include "lidar_align/sensors.h"
 #include "lidar_align/common.h"
+#include <filesystem>
+#include <iomanip>
 #include <ios>
 #include <iostream>
+#include <pcl/io/pcd_io.h>
 #include <random>
 
 namespace lidar_align {
@@ -102,6 +105,20 @@ Scan::Scan(const LoaderPointcloud &in, const Config &config)
     }
   }
   raw_points_.header = in.header;
+
+  /*std::cout << std::setprecision(15)*/
+  /*          << "Loader2: scan cloud header time: " <<
+   * raw_points_.header.stamp*/
+  /*          << std::endl;*/
+  /*int count = 0;*/
+  /*while (count < raw_points_.size()) {*/
+  /**/
+  /*  std::cout << std::setprecision(15)*/
+  /*            << "Loader2: point time: " <<
+   * raw_points_.points[count].intensity*/
+  /*            << std::endl;*/
+  /*  count += 10;*/
+  /*}*/
 }
 
 /*Scan::Config Scan::getConfig(ros::NodeHandle* nh) {*/
@@ -188,8 +205,23 @@ void Lidar::addPointcloud(const LoaderPointcloud &pointcloud,
 }
 
 void Lidar::getCombinedPointcloud(Pointcloud *pointcloud) const {
+  /*fs::path save_folder = "/home/udeer/data/InsGj/0408/0416result";*/
+  /*size_t count = 0;*/
+  /*size_t step = 10;*/
+  /*size_t stem = 0;*/
+  /*Pointcloud debug_cloud;*/
+
   for (const Scan &scan : scans_) {
     scan.getTimeAlignedPointcloud(getOdomLidarTransform(), pointcloud);
+    /*scan.getTimeAlignedPointcloud(getOdomLidarTransform(), &debug_cloud);*/
+    /*count++;*/
+    /*if (count == step) {*/
+    /*  fs::path save_path = save_folder / (std::to_string(stem) + ".pcd");*/
+    /*  pcl::io::savePCDFile(save_path.string(), debug_cloud);*/
+    /*  debug_cloud.clear();*/
+    /*  count = 0;*/
+    /*  stem++;*/
+    /*} // end if*/
   }
 }
 
