@@ -42,6 +42,7 @@ bool Loader::loadPointCloudFromFolder(const fs::path &folder,
       continue;
     }
 
+    // NOTE: file name is the first point timestamp unit us
     std::string name = f.stem().string();
     std::uint64_t time = std::stoull(name);
     pointcloud.header.stamp = time;
@@ -50,11 +51,17 @@ bool Loader::loadPointCloudFromFolder(const fs::path &folder,
       point.x = p.x;
       point.y = p.y;
       point.z = p.z;
-      pointcloud.emplace_back(std::move(point));
       if (!std::isfinite(point.x) || !std::isfinite(point.y) ||
           !std::isfinite(point.z)) {
         continue;
       }
+
+      // NOTE: input: p.intensity type is float. intensity =
+      // t_current_point(s) - first_point(s)
+      // it should convert to long long int
+      point.intensity = static_cast<Timestamp>(p.intensity * 1e6);
+      point.time_offset_us = point.intensity;
+      pointcloud.emplace_back(std::move(point));
     }
 
     std::cout << "point cloud time : " << pointcloud.header.stamp;

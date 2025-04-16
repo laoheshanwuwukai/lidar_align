@@ -43,6 +43,13 @@ target_link_libraries(lidar_align_node
   lidar_align_common
   gflags_shared
 )
+add_executable(fortest
+  src/tools.cpp
+)
+target_link_libraries(fortest
+  lidar_align_common
+  gflags_shared
+)
 
 
 install(DIRECTORY include/lidar_align

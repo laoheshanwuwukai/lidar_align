@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 
 def plot_two_txt_files_nearest_match(file_a, file_b):
@@ -33,6 +35,8 @@ def plot_two_txt_files_nearest_match(file_a, file_b):
     # 画图
     titles = ["t_lidar", "x", "y", "z", "roll", "pitch", "yaw"]
 
+    save_folder = Path(file_a).parent
+
     for i in range(1, 7):
         name = titles[i]
         plt.figure()
@@ -46,6 +50,10 @@ def plot_two_txt_files_nearest_match(file_a, file_b):
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
+
+        save_path = save_folder/f"{name}.png"
+        plt.savefig(save_path.as_posix(), dpi=300, bbox_inches='tight')
+        print(f"{name} result save to {save_path.as_posix()}")
 
     plt.show()
 
