@@ -27,12 +27,12 @@ aligner:
     output_pointcloud_path : "/home/udeer/data/InsGj/0408/result/cloudmap.ply"
     output_calibration_path : "/home/udeer/data/InsGj/0408/result/calibmap.txt"
     inital_guess:
-      - 0.2
-      - 0.3
-      - 0.4
       - 0.0
       - 0.0
-      - 0.1745327777777778
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
       - 0.0
 
 # for combain clouds from lidar to odom
@@ -62,6 +62,26 @@ debug:
    - 0
    - 1
   evo_result: # from ref to est
+   # - -0.0283196
+   # - -0.999598
+   # - -0.0016717
+   # - -0.216226
+   # - 0.999582
+   # - -0.0283289
+   # - 0.00582084
+   # - 0.866041
+   # - -0.00586585
+   # - -0.00150616
+   # - 0.999982
+   # - -0.0175462
+   # - 0
+   # - 0
+   # - 0
+   # - 1
+
+
+
+    # unit
     - 1.0
     - 0.0
     - 0.0
@@ -78,6 +98,9 @@ debug:
     - 0.0
     - 0.0
     - 1.0
+
+
+    # a evo result
     # - 0.99999617 
     # - -0.00184726
     # - 0.00205957

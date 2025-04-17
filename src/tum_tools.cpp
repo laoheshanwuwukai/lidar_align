@@ -9,6 +9,7 @@ DEFINE_string(config, "/home/udeer/lidar_align/config/config.yaml",
               "config yaml file");
 DEFINE_string(pose, "", "input ins data file");
 DEFINE_string(out, "", "output_path");
+DEFINE_bool(i, true, " Init from identity");
 
 struct TumPoseConfig {
   Eigen::Matrix4d T_source_target;
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]) {
   YAML::Node node = YAML::LoadFile(config_file.string());
   const auto &conf = GetDebugConfig(node);
 
-  TransformTumPose(pose_file, conf.T_target_source, out_file);
+  TransformTumPose(pose_file, conf.T_target_source, out_file, FLAGS_i);
 
   return 0;
 }
