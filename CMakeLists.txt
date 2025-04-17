@@ -28,11 +28,13 @@ add_library( lidar_align_common
   src/sensors.cpp
   src/aligner.cpp
   src/loader.cpp
+  src/common.cpp
 )
 target_link_libraries( lidar_align_common
   ${NLOPT_LIBRARIES}
   ${PCL_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
+  gflags_shared
 )
 
 
@@ -41,21 +43,18 @@ add_executable(lidar_align_node
 )
 target_link_libraries(lidar_align_node
   lidar_align_common
-  gflags_shared
 )
-add_executable(fortest
-  src/tools.cpp
+add_executable(tum_tools
+  src/tum_tools.cpp
 )
-target_link_libraries(fortest
+target_link_libraries(tum_tools
   lidar_align_common
-  gflags_shared
 )
 add_executable(combain
   src/combainclouds.cpp
 )
 target_link_libraries(combain
   lidar_align_common
-  gflags_shared
 )
 
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <Eigen/Dense>
 #include <filesystem>
 #include <string>
 #include <vector>
@@ -37,3 +38,7 @@ static std::vector<fs::path> getAllfiles(fs::path folder_path,
   }
   return files;
 }
+
+void TransformTumPose(const fs::path &source_tum_pose_path,
+                      const Eigen::Matrix4d &T_target_source,
+                      const fs::path &output_path, bool init_from_I = true);
