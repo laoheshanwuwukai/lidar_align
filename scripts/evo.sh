@@ -20,3 +20,8 @@ evo_ape tum \
   /home/udeer/data/InsGj/0408/mapping_result/mapping_result_tum_format \
   /home/udeer/data/InsGj/lidarlocalizer/fusion_tum.txt \
   -r trans_part --plot --plot_mode xy -va
+
+evo_ape tum \
+  /home/udeer/data/InsGj/0408/0417result/fusion_tum_ingj_fromI.txt \
+  /home/udeer/data/InsGj/0408/0417result/_udeer_drivers_gnss_gjins_ins_tumformat \
+  -r trans_part --plot --plot_mode xy -v

@@ -2,6 +2,7 @@
 #include "lidar_align/common.h"
 #include <Eigen/Dense>
 #include <gflags/gflags.h>
+#include <iostream>
 #include <yaml-cpp/node/parse.h>
 namespace fs = std::filesystem;
 
@@ -38,6 +39,7 @@ int main(int argc, char *argv[]) {
   fs::path out_file(FLAGS_out);
   YAML::Node node = YAML::LoadFile(config_file.string());
   const auto &conf = GetDebugConfig(node);
+  std::cout << "T_target_source :\n" << conf.T_target_source << std::endl;
 
   TransformTumPose(pose_file, conf.T_target_source, out_file, FLAGS_i);
 

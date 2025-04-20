@@ -52,13 +52,13 @@ def plot_two_txt_files_nearest_match(file_a, file_b):
         plt.tight_layout()
 
         save_path = save_folder/f"{name}.png"
-        plt.savefig(save_path.as_posix(), dpi=300, bbox_inches='tight')
+        _ = plt.savefig(save_path.as_posix(), dpi=300, bbox_inches='tight')
         print(f"{name} result save to {save_path.as_posix()}")
 
     plt.show()
 
 
 if __name__ == "__main__":
-    mapping_result = "/home/udeer/data/InsGj/0408/0414check/lidarpose_EVO_inggongji_txyzrpy"
-    gongji_result = "/home/udeer/data/InsGj/0408/0414check/_udeer_drivers_gnss_gjins_ins_txyzrpy"
+    mapping_result = "/home/udeer/data/InsGj/0408/0417result/fusion_xyzrpy_ingj_fromI.txt_dx-0.260000_dy0.850000_dt0.000000"
+    gongji_result = "/home/udeer/data/InsGj/0408/0417result/_udeer_drivers_gnss_gjins_ins_xyzrpy_dx-0.260000_dy0.850000_dt0.000000"
     plot_two_txt_files_nearest_match(mapping_result, gongji_result)

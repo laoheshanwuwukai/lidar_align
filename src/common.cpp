@@ -45,6 +45,7 @@ void TransformTumPose(const fs::path &source_tum_pose_path,
     // from target to world
     Eigen::Matrix4d T_world_target = T_world_source * T_source_target;
     if (!init_target0_pose) {
+      std::cout << "Set from I" << std::endl;
       T_target0_world = T_world_target.inverse();
       init_target0_pose = true;
     }
