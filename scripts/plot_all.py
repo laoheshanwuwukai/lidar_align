@@ -81,4 +81,4 @@ if __name__ == "__main__":
     df1 = load_data(ref_path)
     df2 = load_data(est_path)
 
-    plot_xyz_rpy(df1, df2, "ref:lidar_localizer", "est:Sensor")
+    plot_xyz_rpy(df1, df2, "ref:lidar_mapping", "est:Sensor")

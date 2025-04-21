@@ -24,8 +24,8 @@ aligner:
     local_knn_max_dist : 0.1
     global_knn_max_dist : 1.0
     time_cal : true
-    output_pointcloud_path : "/home/udeer/data/InsGj/test_0408/result/cloud.ply"
-    output_calibration_path : "/home/udeer/data/InsGj/test_0408/result/calib.txt"
+    output_pointcloud_path : "/home/udeer/data/InsGj/0408/result/cloud.ply"
+    output_calibration_path : "/home/udeer/data/InsGj/0408/result/calib.txt"
     inital_guess:
       - 0.0
       - 0.0
@@ -37,52 +37,24 @@ aligner:
 
 # for combain clouds from lidar to odom
 debug:
-  x: -0.26
-  y: 0.85
-  z: 0.85
-  roll: 0   # angle
-  pitch: 0
-  yaw: 90
   # for transform tum pose , T_target_source
   T_target_source:
-   # calib result -pitch and ins pose from R_yaw R_pitch R_roll
-   - -0.0283196
-   - -0.999598
-   - -0.0016717
-   - -0.216226
-   - 0.999582
-   - -0.0283289
-   - 0.00582084
-   - 0.866041
-   - -0.00586585
-   - -0.00150616
-   - 0.999982
-   - -0.0175462
-   - 0
-   - 0
-   - 0
-   - 1
-
-  # calib result from pitch and ins pose from R_yaw*R_pitch*R_roll
-    # - -0.0264119
-    # - -0.999643
-    # - 0.00399954
-    # - -0.21793
-    # - 0.999641
-    # - -0.0263937
-    # - 0.00454689
-    # - 0.867004
-    # - -0.0044397
-    # - 0.0041182
-    # - 0.999982
-    # - 0.0270259
-    # - 0
-    # - 0
-    # - 0
-    # - 1
-
-
-
+    - -0.0278213
+    - -0.999591
+    - 0.0065789
+    - -0.216773
+    - 0.999579
+    - -0.0277653
+    - 0.00846826
+    - 0.866494
+    - -0.00828213
+    - 0.00681173
+    - 0.999942
+    - 0.0910535
+    - 0
+    - 0
+    - 0
+    - 1
     #unit
     # - 1.0
     # - 0.0
@@ -102,25 +74,6 @@ debug:
     # - 1.0
 
   evo_result: # from ref to est
-   # - -0.0283196
-   # - -0.999598
-   # - -0.0016717
-   # - -0.216226
-   # - 0.999582
-   # - -0.0283289
-   # - 0.00582084
-   # - 0.866041
-   # - -0.00586585
-   # - -0.00150616
-   # - 0.999982
-   # - -0.0175462
-   # - 0
-   # - 0
-   # - 0
-   # - 1
-
-
-
     # unit
     - 1.0
     - 0.0
@@ -138,22 +91,3 @@ debug:
     - 0.0
     - 0.0
     - 1.0
-
-
-    # a evo result
-    # - 0.99999617 
-    # - -0.00184726
-    # - 0.00205957
-    # - -0.0403318
-    # - 0.00187958
-    # - 0.99987331
-    # - -0.01580621
-    # - 0.02858326
-    # - -0.00203011
-    # - 0.01581002
-    # - 0.99987295
-    # - -0.01844589
-    # - 0.0
-    # - 0.0
-    # - 0.0
-    # - 1
