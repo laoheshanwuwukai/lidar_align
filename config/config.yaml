@@ -24,8 +24,8 @@ aligner:
     local_knn_max_dist : 0.1
     global_knn_max_dist : 1.0
     time_cal : true
-    output_pointcloud_path : "/home/udeer/data/InsGj/0408/result/cloudmap.ply"
-    output_calibration_path : "/home/udeer/data/InsGj/0408/result/calibmap.txt"
+    output_pointcloud_path : "/home/udeer/data/InsGj/test_0408/result/cloud.ply"
+    output_calibration_path : "/home/udeer/data/InsGj/test_0408/result/calib.txt"
     inital_guess:
       - 0.0
       - 0.0
@@ -45,40 +45,61 @@ debug:
   yaw: 90
   # for transform tum pose , T_target_source
   T_target_source:
-   # - -0.0283196
-   # - -0.999598
-   # - -0.0016717
-   # - -0.216226
-   # - 0.999582
-   # - -0.0283289
-   # - 0.00582084
-   # - 0.866041
-   # - -0.00586585
-   # - -0.00150616
-   # - 0.999982
-   # - -0.0175462
-   # - 0
-   # - 0
-   # - 0
-   # - 1
+   # calib result -pitch and ins pose from R_yaw R_pitch R_roll
+   - -0.0283196
+   - -0.999598
+   - -0.0016717
+   - -0.216226
+   - 0.999582
+   - -0.0283289
+   - 0.00582084
+   - 0.866041
+   - -0.00586585
+   - -0.00150616
+   - 0.999982
+   - -0.0175462
+   - 0
+   - 0
+   - 0
+   - 1
+
+  # calib result from pitch and ins pose from R_yaw*R_pitch*R_roll
+    # - -0.0264119
+    # - -0.999643
+    # - 0.00399954
+    # - -0.21793
+    # - 0.999641
+    # - -0.0263937
+    # - 0.00454689
+    # - 0.867004
+    # - -0.0044397
+    # - 0.0041182
+    # - 0.999982
+    # - 0.0270259
+    # - 0
+    # - 0
+    # - 0
+    # - 1
+
+
 
     #unit
-    - 1.0
-    - 0.0
-    - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
-    - 0.0
-    - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
-    - 0.0
-    - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
+    # - 1.0
+    # - 0.0
+    # - 0.0
+    # - 0.0
+    # - 0.0
+    # - 1.0
+    # - 0.0
+    # - 0.0
+    # - 0.0
+    # - 0.0
+    # - 1.0
+    # - 0.0
+    # - 0.0
+    # - 0.0
+    # - 0.0
+    # - 1.0
 
   evo_result: # from ref to est
    # - -0.0283196
